@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1> Choose xlsx file</h1>
+    <div class="parent">
+    <form action="fileUpload" method="post" enctype="multipart/form-data">
+        <input type="file" name="files" id="actual-btn"/><br>
+        <button class="btn">Submit</button>
+    </form>
+    </div>
+</body>
+<style>
+    .btn {
+  background-color: #00AC47;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  padding: 6px 15px;
+  cursor: pointer;
+  font-size: 15px;
+  margin-top: 10px;
+}
+
+    h1{
+        text-align: center;
+        font-family: monospace;
+    }
+    .parent{
+        width: 500px;
+        margin: 200px auto 0 auto;
+        text-align: center;
+    }
+
+    label {
+        background-color: #00AC47;
+        color: white;
+        padding: 0.5rem;
+        font-family: sans-serif;
+        border-radius: 0.3rem;
+        cursor: pointer;
+        margin-top: 1rem;
+    }
+</style>
+
+</html>
