@@ -12,41 +12,6 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
-const file = reader.readFile("Data.xlsx");
-
-const sheets = file.SheetNames;
-
-const master = reader.utils.sheet_to_json(file.Sheets["Master"]);
-const test = reader.utils.sheet_to_json(file.Sheets["Test"]);
-
-
-
-let map = new Map();
-for (let i = 0; i < master.length; i++) {
-  const name = master[i]["Item name"]
-    .toLowerCase()
-    .split("")
-    .filter((elem) => {
-      return elem.toLowerCase() != elem.toUpperCase() || elem >= 0 || elem <= 9;
-    })
-    .join("");
-  const id = master[i]["Product ID"];
-  map.set(name, id);
-}
-for (let i = 0; i < test.length; i++) {
-  const productName = test[i]["Item Name"]
-    .toLowerCase()
-    .split("")
-    .filter((elem) => {
-      return elem.toLowerCase() != elem.toUpperCase() || elem >= 0 || elem <= 9;
-    })
-    .join("");
-  const productId = map.get(productName);
-
-  test[i]["Product ID_Master"] = productId;
-}
-
-
 
 app.get("/", (req, res) => {
   res.render("index");
@@ -55,7 +20,6 @@ app.get("/", (req, res) => {
 
 
 app.post("/fileUpload", upload.single("files"), async (req, res) => {
-  const filename = req.file.originalname; // getting the original filename
   const oldPath = __dirname + `/uploads/` + req.file.filename;
   const newPath = __dirname + `/uploads/` + "file.xlsx";
 
@@ -101,7 +65,13 @@ app.post("/fileUpload", upload.single("files"), async (req, res) => {
     test[i]["Product ID_Master"] = productId;
   }
   const ws = reader.utils.json_to_sheet(test);
-  reader.utils.book_append_sheet(file,ws,"Outputt")
+  try {
+    reader.utils.book_append_sheet(file,ws,"Output")  
+  } catch (error) {
+    res.send('<h1> Output sheet is already present</h1>');
+    return;
+  }
+  
   // Writing to our file
   reader.writeFile(file,`uploads/file.xlsx`)
     res.render('download');
