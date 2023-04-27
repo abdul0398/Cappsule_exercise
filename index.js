@@ -69,6 +69,8 @@ app.post("/fileUpload", upload.single("files"), async (req, res) => {
     reader.utils.book_append_sheet(file,ws,"Output")  
   } catch (error) {
     res.send('<h1> Output sheet is already present</h1>');
+    let filePath = `${__dirname}/uploads/file.xlsx`; 
+    await fsPromises.unlink(filePath);  
     return;
   }
   
